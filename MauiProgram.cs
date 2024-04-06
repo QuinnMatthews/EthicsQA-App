@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using EthicsQA.Data;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
 
 namespace EthicsQA;
 
@@ -24,6 +28,14 @@ public static class MauiProgram
 
 		builder.Services.AddSingleton<WeatherForecastService>();
 
-		return builder.Build();
-	}
+        builder.Services.AddAuthorizationCore();
+        builder.Services.TryAddScoped<AuthenticationStateProvider, ExternalAuthStateProvider>();
+		builder.Services.AddSingleton<EthicsQA.Services.EthicsAPIClient>();
+        builder.Services.AddAuthorizationCore();
+
+
+        return builder.Build();
+
+
+    }
 }
