@@ -1,0 +1,29 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="col">
+    <div class="vstack" @onclick="NavigateToLink">
+        <span class="material-symbols-outlined align-self-center">
+            @Icon
+        </span>
+        <span class="align-self-center nav-title">
+            @Title
+        </span>
+    </div>
+</div>
+
+@code {
+    [Parameter] 
+    public string Title { get; set; }
+
+    [Parameter] 
+    public string Icon { get; set; }
+
+    [Parameter] 
+    public string Link { get; set; }
+
+    private void NavigateToLink()
+    {
+        NavigationManager.NavigateTo(Link);
+    }
+
+}
