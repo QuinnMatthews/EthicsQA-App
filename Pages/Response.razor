@@ -1,0 +1,27 @@
+@page "/response"
+
+<h1>Response</h1>
+
+
+
+<p>AI Model Response:</p>
+<p>@GPTResponse</p>
+
+
+@code {
+    private string GPTResponse;
+
+
+    private string get_AI_response()
+    {
+        string gpt_response = "Placeholder String";
+        return gpt_response;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        GPTResponse = get_AI_response();
+    }
+
+}
