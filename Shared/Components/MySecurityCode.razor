@@ -1,0 +1,30 @@
+﻿@*
+    Code from Radzen's SecurityCode.razor component slightly modified to create a custom component.
+*@
+@using System.Linq
+@using Microsoft.AspNetCore.Components.Forms
+@using Radzen
+@using Radzen.Blazor
+@inherits FormComponent<string>
+
+@if (Visible)
+{
+    <div @ref="@Element" style=@Style @attributes="Attributes" class="@GetCssClass()" id="@GetId()">
+        <div class="rz-helper-hidden-accessible">
+            <input disabled="@Disabled" type="hidden" name="@Name">
+        </div>
+        <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceBetween" Gap="@Gap" Class="rz-security-code-wrapper">
+            @foreach (var index in Enumerable.Range(1, Count))
+            {
+                @if (Type == SecurityCodeType.Password)
+                {
+                    <RadzenPassword Value="@ElementAt(index - 1)" Disabled="@Disabled" AutoComplete="false" MaxLength="1" size="1" Class="rz-security-code-input" inputmode="numeric"/>
+                }
+                else
+                {
+                    <RadzenTextBox Value="@ElementAt(index - 1)" Disabled="@Disabled" AutoComplete="false" MaxLength="1" size="1" Class="rz-security-code-input" inputmode="numeric"/>
+                }
+            }
+        </RadzenStack>
+    </div>
+}

@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Radzen.Blazor
+@inherits LayoutComponentBase
+
 
 <div class="page">
     <main>
@@ -8,6 +11,7 @@
     </main>
 
     <!--Floating bottom nav-->
+    <AuthorizeView>
     <div>
         <nav class="fixed-bottom align-content-center">
             <div class="row justify-content-evenly">
@@ -26,11 +30,13 @@
                 <LowerNavItem Icon="info" Title="About Us" Link="about" />
 
                 <!--Logout-->
-                <LowerNavItem Icon="logout" Title="Logout" Link="logout" />
+                <LowerNavItem Icon="logout" Title="Logout" Link="login" />
 
                 <!--End Padding-->
                 <div class="col-1"></div>
             </div>
         </nav>
     </div>
+    </AuthorizeView>
 </div>
+<RadzenComponents/>

@@ -1,0 +1,14 @@
+﻿.title {
+    font-size: 2rem;
+    font-family: 'Oxanium';
+}
+
+.login {
+    align-content: center;
+    text-align: center;
+    height: 80vh;
+}
+
+p {
+    margin: 0;
+}

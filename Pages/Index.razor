@@ -1,16 +1,30 @@
-﻿@page "/"
+@page "/"
+
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
 
 <h1>Ask your question</h1>
 
-
-
-
-    <div class="container">
-        <textarea placeholder="Type your question here..."></textarea>
-        <div class="button-container">
-            <button>For</button>
-            <button>Against</button>
-            <button>Neutral</button>
-        </div>
+<div class="container">
+    <textarea placeholder="Type your question here..."></textarea>
+    <div class="button-container">
+        <button>For</button>
+        <button>Against</button>
+        <button>Neutral</button>
     </div>
+</div>
 
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("login");
+        }
+    }
+}
