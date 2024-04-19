@@ -1,14 +1,19 @@
-﻿@page "/"
+@page "/"
 
 @using Microsoft.AspNetCore.Components.Authorization
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavigationManager
 
-<h1>Hello, world!</h1>
+<h1>Ask your question</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div class="container">
+    <textarea placeholder="Type your question here..."></textarea>
+    <div class="button-container">
+        <button>For</button>
+        <button>Against</button>
+        <button>Neutral</button>
+    </div>
+</div>
 
 @code {
 

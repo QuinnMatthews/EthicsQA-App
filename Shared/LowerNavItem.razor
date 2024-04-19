@@ -1,4 +1,4 @@
-﻿@inject NavigationManager NavigationManager
+@inject NavigationManager NavigationManager
 
 <div class="col">
     <div class="vstack" @onclick="NavigateToLink">
@@ -21,7 +21,7 @@
     [Parameter] 
     public string Link { get; set; }
 
-    protected void NavigateToLink()
+    private void NavigateToLink()
     {
         NavigationManager.NavigateTo(Link);
     }
