@@ -11,41 +11,21 @@ namespace EthicsQA {
 
     public class ExternalAuthStateProvider : AuthenticationStateProvider {
         private ClaimsPrincipal currentUser = new ClaimsPrincipal(new ClaimsIdentity());
-        private readonly EthicsAPIClient apiClient;
 
-        public ExternalAuthStateProvider(EthicsAPIClient client) {
-            apiClient = client;
+        public ExternalAuthStateProvider() { 
+
         }
 
         public override Task<AuthenticationState> GetAuthenticationStateAsync() =>
             Task.FromResult(new AuthenticationState(currentUser));
 
-        public Task LogInAsync() {
-            var loginTask = LogInAsyncCore();
-            NotifyAuthenticationStateChanged(loginTask);
 
-            return loginTask;
-
-            async Task<AuthenticationState> LogInAsyncCore() {
-                var user = await LoginWithAuth0Async();
-                currentUser = user;
-
-                return new AuthenticationState(currentUser);
-            }
+        public void SetUser(ClaimsPrincipal user) {
+            currentUser = user;
+            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(currentUser)));
         }
 
-        private async Task<ClaimsPrincipal> LoginWithAuth0Async() {
-            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity());
-            var loginResult = await apiClient.LoginAsync();
-
-            if(!loginResult.IsError) {
-                authenticatedUser = loginResult.User;
-            }
-            return authenticatedUser;
-        }
-
-        public async void LogOut() {
-            await apiClient.LogoutAsync();
+        public void LogOut() {
             currentUser = new ClaimsPrincipal(new ClaimsIdentity());
             NotifyAuthenticationStateChanged(
                 Task.FromResult(new AuthenticationState(currentUser)));

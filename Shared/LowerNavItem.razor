@@ -1,5 +1,7 @@
-﻿<div class="col">
-    <div class="vstack">
+﻿@inject NavigationManager NavigationManager
+
+<div class="col">
+    <div class="vstack" @onclick="NavigateToLink">
         <span class="material-symbols-outlined align-self-center">
             @Icon
         </span>
@@ -18,5 +20,10 @@
 
     [Parameter] 
     public string Link { get; set; }
+
+    protected void NavigateToLink()
+    {
+        NavigationManager.NavigateTo(Link);
+    }
 
 }

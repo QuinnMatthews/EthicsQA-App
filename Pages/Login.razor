@@ -1,0 +1,68 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Authorization
+@using Radzen
+@using Radzen.Blazor
+@using EthicsQA.Services
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+@inject EthicsAPIClient EthicsAPIClient
+@inject NotificationService NotificationService
+
+
+<div class="login">
+
+    <h1 class="title">Ethical Checkers</h1>
+
+    @if (IsCodeSent == false)
+    {
+        <RadzenMask Mask="(***) ***-****" CharacterPattern="[0-9]" Placeholder="(000) 000-0000" Name="Phone" @bind-Value=@Phone
+        Style="width: 100%; margin: 1rem 0;" aria-label="Phone" inputmode="tel"/>
+        <RadzenButton Text="Send Code" Style="width: 100%;" Click="SendCode" />
+    } else {
+        <p>Code sent to: @Phone <a @onclick="ChangePhone" class="link">(Change)</a></p>
+        <EthicsQA.Shared.Components.MySecurityCode Count="6" Type="Radzen.SecurityCodeType.Numeric" @bind-Value=@Code Style="width: 100%; margin: 1rem 0;" />
+        <br/>
+        <RadzenButton Text="Verify Code" Style="width: 100%;" Click="VerifyCode"/>
+    }
+</div>
+
+@code {
+    private string Phone { get; set; }
+    private bool IsCodeSent { get; set; }
+    private string Code { get; set; }
+
+
+    protected override async Task OnInitializedAsync() {
+        ((ExternalAuthStateProvider)AuthStateProvider).LogOut();
+    }
+
+    public void ChangePhone() {
+        IsCodeSent = false;
+    }
+
+    public async Task SendCode() {
+        var _phone = Phone.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "");
+        _phone = "+1" + _phone;
+        var result = await EthicsAPIClient.SendAuthenticationCodeAsync(_phone);
+        if (result.Success)
+        {
+            IsCodeSent = true;
+        } else {
+            // Show error message
+            NotificationService.Notify(NotificationSeverity.Error, "Error", result.ErrorMessage);
+        }
+    }
+
+    public async Task VerifyCode() {
+        var _phone = Phone.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "");
+        _phone = "+1" + _phone;
+        var result = await EthicsAPIClient.LoginAsync(_phone, Code);
+        if (result.Success)
+        {
+            NavigationManager.NavigateTo("/");
+        } else {
+            // Show error message
+            NotificationService.Notify(NotificationSeverity.Error, "Error", result.ErrorMessage);
+        }
+    }
+}
